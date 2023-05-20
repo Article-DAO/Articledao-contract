@@ -8,7 +8,7 @@ Though the idea is innovative, yet it still encounters problems that are to be s
 
 
 
-![Uploading Screen Shot 2023-05-20 at 11.43.12 PM.png…]()
+<img width="425" alt="Screen Shot 2023-05-20 at 11 45 48 PM" src="https://github.com/Glitch-valleydao/valleydao-contract/assets/113398351/8df16af7-0dfc-4a47-87a1-7f5fc9fa1534">
 
 
 
