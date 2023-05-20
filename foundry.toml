@@ -2,6 +2,7 @@
 src = "src"
 out = "out"
 libs = ["lib"]
+# copy this for examples here
 
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config
