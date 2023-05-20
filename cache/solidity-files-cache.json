@@ -849,8 +849,8 @@
       }
     },
     "src/Article_DAO.sol": {
-      "lastModificationDate": 1684508982038,
-      "contentHash": "12b03e3fd598e000e7c2e9d8f0175827",
+      "lastModificationDate": 1684563438334,
+      "contentHash": "f33ecdf40265a5c772bd9af33e85c7b9",
       "sourceName": "src/Article_DAO.sol",
       "solcConfig": {
         "settings": {
@@ -893,8 +893,8 @@
       }
     },
     "src/GlitchERC20.sol": {
-      "lastModificationDate": 1684385029420,
-      "contentHash": "de1d38b84043f76b2929dba8afdd6a84",
+      "lastModificationDate": 1684559748542,
+      "contentHash": "ec1c36189a82d7e9089d7e273ea517d2",
       "sourceName": "src/GlitchERC20.sol",
       "solcConfig": {
         "settings": {
