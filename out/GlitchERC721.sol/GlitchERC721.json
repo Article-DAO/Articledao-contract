@@ -1,0 +1,53 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "src/GlitchERC721.sol",
+    "id": 30801,
+    "exportedSymbols": {
+      "IERC165": [
+        30810
+      ],
+      "IGlitchERC721": [
+        31018
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "51:66:21",
+    "nodes": [
+      {
+        "id": 30799,
+        "nodeType": "PragmaDirective",
+        "src": "51:23:21",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "0.8",
+          ".18"
+        ]
+      },
+      {
+        "id": 30800,
+        "nodeType": "ImportDirective",
+        "src": "76:40:21",
+        "nodes": [],
+        "absolutePath": "src/interfaces/IGlitchERC721.sol",
+        "file": "./interfaces/IGlitchERC721.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 30801,
+        "sourceUnit": 31019,
+        "symbolAliases": [],
+        "unitAlias": ""
+      }
+    ],
+    "license": "SEE LICENSE IN LICENSE"
+  },
+  "id": 21
+}
