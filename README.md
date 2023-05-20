@@ -11,16 +11,17 @@ Though the idea is innovative, yet it still encounters problems that are to be s
 
 
 Previous voting model	Article DAO voting model 
-V = Votes
-C = Challenges
-+100 DToken	+100 DToken | 15 V | 2 C
-+120 DToken	+120 DToken | 60 V | 15 C
--10 DToken	-10 DToken | 15 V | 2 C
--30 DToken	-30 DToken | 10 V | 4 C
--40 DToken	-40 DToken | 30 V | 15 C
-+20 DToken	+20 DToken | 35 V | 40 C
--200 DToken	-200 DToken | 10 V | 2 C
-POLL REJECTED	POLL PASSED
+			V = Votes
+			C = Challenges
+			
++100 DToken		+100 DToken | 15 V | 2 C
++120 DToken		+120 DToken | 60 V | 15 C
+-10 DToken		-10 DToken | 15 V | 2 C
+-30 DToken		-30 DToken | 10 V | 4 C
+-40 DToken		-40 DToken | 30 V | 15 C
++20 DToken		+20 DToken | 35 V | 40 C
+-200 DToken		-200 DToken | 10 V | 2 C
+POLL REJECTED		POLL PASSED
 
 	In previous model of ADAO, when a whale decides to mint tons of tokens to barely win the poll, it will require harder efforts as the new model from ADAO applies other factors that are not buyable in calculation for the votes.
 
