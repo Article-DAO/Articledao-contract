@@ -83,7 +83,6 @@ contract Article_DAO is GlitchERC20 {
     uint public registrationnum = 0; // wrtier 등록 수
     mapping(uint => WriterRegistration) public writerRegistrations;
     uint public proposalnum = 0; // proposal 등록수
-    mapping(uint => uint) public articlenum; // proposalid => article 등록수
     mapping(uint => Proposal) public proposals;
     mapping(uint => Article[]) public articles; // proposalid => article 저장
     mapping(address => Member) public members; //dao member 정보 등록
@@ -91,14 +90,18 @@ contract Article_DAO is GlitchERC20 {
     mapping(address => bool) public writers; // true = writer 등록완료
     mapping(address => mapping(uint => uint)) public votedarticles; // proposalid => articleid => 투표한 아티클 저장
 
+    uint public r1 = 5;
+    uint public r2 = 3;
+    uint public r3 = 2;
+
     // id => (투표자주소 => 투표자 정보 등록)
     mapping(uint => mapping(address => Voter)) private _wvoters;
     mapping(uint => mapping(address => Voter)) private _avoters;
 
-    uint public constant PARTICIPATIONEXPIRY = 100; // 투표참여 등록 기간
-    uint public constant VOTINGEXPIRY = 100; // 투표 기간
-    uint public constant ARTICLEREGISTRATIONEXPIRY = 100; // 아티클 등록 기간
-    uint public constant CHALLEGEEXPIRY = 100; // 챌린지 기간
+    uint public constant PARTICIPATIONEXPIRY = 40; // 투표참여 등록 기간
+    uint public constant VOTINGEXPIRY = 40; // 투표 기간
+    uint public constant ARTICLEREGISTRATIONEXPIRY = 40; // 아티클 등록 기간
+    uint public constant CHALLEGEEXPIRY = 40; // 챌린지 기간
     uint public constant REGISTRATIONDEPOSIT = 100; // 작가 등록 보증금
 
     //getter 함수
@@ -111,7 +114,7 @@ contract Article_DAO is GlitchERC20 {
     }
 
     function getarticlenum(uint pid) public view returns (uint) {
-        return articlenum[pid];
+        return articles[pid].length;
     }
 
     function getWregister(
@@ -412,7 +415,7 @@ contract Article_DAO is GlitchERC20 {
             "Voting not expired"
         );
         if (proposal.votingState == 1) {
-            proposals[proposalid].votingState = 2;
+            proposals[proposalid].votingState = 3;
         }
 
         if ((DECIMALS * article.votedweights) / proposal.totalweights > 1000) {}
@@ -456,5 +459,11 @@ contract Article_DAO is GlitchERC20 {
         uint c = (DECIMALS * _tf) / (_tt + _tf);
         uint d = (DECIMALS * _ff) / (_ft + _ff);
         _pi_quorum = DECIMALS - ((DECIMALS * d) / (d + DECIMALS - c));
+    }
+
+    function _setparam(uint r1_, uint r2_, uint r3_) internal {
+        r1 = r1_;
+        r2 = r2_;
+        r3 = r3_;
     }
 }

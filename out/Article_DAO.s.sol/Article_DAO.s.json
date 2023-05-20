@@ -1,0 +1,84 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "script/Article_DAO.s.sol",
+    "id": 29157,
+    "exportedSymbols": {
+      "Script": [
+        2400
+      ],
+      "ScriptBase": [
+        2363
+      ],
+      "StdChains": [
+        4512
+      ],
+      "StdCheatsSafe": [
+        6109
+      ],
+      "StdStorage": [
+        7828
+      ],
+      "StdUtils": [
+        11299
+      ],
+      "VmSafe": [
+        12390
+      ],
+      "console": [
+        20894
+      ],
+      "console2": [
+        28990
+      ],
+      "stdJson": [
+        7654
+      ],
+      "stdMath": [
+        7796
+      ],
+      "stdStorageSafe": [
+        8720
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "39:57:18",
+    "nodes": [
+      {
+        "id": 29155,
+        "nodeType": "PragmaDirective",
+        "src": "39:24:18",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".13"
+        ]
+      },
+      {
+        "id": 29156,
+        "nodeType": "ImportDirective",
+        "src": "65:30:18",
+        "nodes": [],
+        "absolutePath": "lib/forge-std/src/Script.sol",
+        "file": "forge-std/Script.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 29157,
+        "sourceUnit": 2401,
+        "symbolAliases": [],
+        "unitAlias": ""
+      }
+    ],
+    "license": "UNLICENSED"
+  },
+  "id": 18
+}

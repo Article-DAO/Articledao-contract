@@ -795,10 +795,10 @@
         }
       }
     },
-    "script/Counter.s.sol": {
-      "lastModificationDate": 1684499453461,
-      "contentHash": "0705c52104730a78aef4aa6694175c81",
-      "sourceName": "script/Counter.s.sol",
+    "script/Article_DAO.s.sol": {
+      "lastModificationDate": 1684602113070,
+      "contentHash": "012ad647e1d1e5690002d01b327bcfba",
+      "sourceName": "script/Article_DAO.s.sol",
       "solcConfig": {
         "settings": {
           "optimizer": {
@@ -843,14 +843,14 @@
       ],
       "versionRequirement": "^0.8.13",
       "artifacts": {
-        "CounterScript": {
-          "0.8.18+commit.87f61d96.Darwin.appleclang": "Counter.s.sol/CounterScript.json"
+        "Article_DAO.s": {
+          "0.8.18+commit.87f61d96.Darwin.appleclang": "Article_DAO.s.sol/Article_DAO.s.json"
         }
       }
     },
     "src/Article_DAO.sol": {
-      "lastModificationDate": 1684591296042,
-      "contentHash": "558e1fa520710d2cc21e56a499d9ac43",
+      "lastModificationDate": 1684611658059,
+      "contentHash": "af167d42d191a61bc9383cc5c21e1fdb",
       "sourceName": "src/Article_DAO.sol",
       "solcConfig": {
         "settings": {
@@ -1180,8 +1180,8 @@
       }
     },
     "test/Article_DAO.t.sol": {
-      "lastModificationDate": 1684507417047,
-      "contentHash": "c7d5dc030c1096859c710e215c979664",
+      "lastModificationDate": 1684602041323,
+      "contentHash": "700190734b4a2c8af970094e985d43f6",
       "sourceName": "test/Article_DAO.t.sol",
       "solcConfig": {
         "settings": {
