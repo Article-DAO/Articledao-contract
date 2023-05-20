@@ -849,8 +849,8 @@
       }
     },
     "src/Article_DAO.sol": {
-      "lastModificationDate": 1684563438334,
-      "contentHash": "f33ecdf40265a5c772bd9af33e85c7b9",
+      "lastModificationDate": 1684575964888,
+      "contentHash": "3113a842f68a69cc174f12179b0bd408",
       "sourceName": "src/Article_DAO.sol",
       "solcConfig": {
         "settings": {

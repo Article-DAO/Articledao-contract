@@ -11,11 +11,12 @@ contract Article_DAO is GlitchERC20 {
     }
 
     // 투표결과
-    enum VotingResult {
+    enum VotingState {
         FOR,
         AGAINST,
         END,
-        NONE
+        PENDING,
+        RECRUITING
     }
 
     // 여러 아티클 중에서 하나만 투표하기.
@@ -24,6 +25,7 @@ contract Article_DAO is GlitchERC20 {
         uint articleid;
         string url;
         uint votedweights;
+        uint rank;
     }
 
     struct Writer {
@@ -58,7 +60,7 @@ contract Article_DAO is GlitchERC20 {
         uint totalstake;
         uint totalvotes;
         uint totalchallenges;
-        VotingResult votingResult;
+        VotingState votingState;
     }
 
     struct Proposal {
@@ -69,7 +71,7 @@ contract Article_DAO is GlitchERC20 {
         uint totalvotes;
         uint totalchallenges;
         uint totalweights;
-        VotingResult votingResult;
+        VotingState votingState;
     }
 
     uint public constant DECIMALS = 10000; // 확률 소수 4째자리까지 표현
@@ -84,12 +86,11 @@ contract Article_DAO is GlitchERC20 {
 
     bool[] private _voteresult; // 투표 결과 저장
 
-    uint[] public wRegisterids; // writerRegistry 조회용 id 저장
+    uint[] public wRegisterids; // writerRegistry 조회용 전체 id 저장
     mapping(uint => WriterRegistration) public writerRegistrations;
     uint[] public proposalids; // proposal 조회용 id 저장
     mapping(uint => Proposal) public proposals;
     mapping(uint => Article[]) public articles; // proposalid => article 저장
-
     mapping(address => Member) public members; //dao member 정보 등록
     mapping(address => Writer) public writermapping; //writer 정보 매핑
     mapping(address => bool) public writers; // true = writer 등록완료
@@ -104,6 +105,17 @@ contract Article_DAO is GlitchERC20 {
     uint public constant ARTICLEREGISTRATIONEXPIRY = 100; // 아티클 등록 기간
     uint public constant CHALLEGEEXPIRY = 100; // 챌린지 기간
     uint public constant REGISTRATIONDEPOSIT = 100; // 작가 등록 보증금
+
+    //getter 함수
+    function getWid() public view returns (uint[] memory) {
+        return wRegisterids;
+    }
+
+    function getPid() public view returns (uint[] memory) {
+        return proposalids;
+    }
+
+    function getwRegistration() public view {}
 
     // 작가 화이트리스트 요청
     function writerRegister(string calldata twitterhandle) external {
@@ -130,7 +142,7 @@ contract Article_DAO is GlitchERC20 {
             totalstake: 0,
             totalvotes: 1,
             totalchallenges: 1,
-            votingResult: VotingResult.NONE
+            votingState: VotingState.RECRUITING
         });
     }
 
@@ -177,6 +189,9 @@ contract Article_DAO is GlitchERC20 {
         );
         Voter memory voter = _wvoters[wRegisterID][msg.sender]; // 가스 절약
         require(voter.voted == false, "Already voted");
+        if (writerRegistry.votingState == VotingState.RECRUITING) {
+            writerRegistrations[wRegisterID].votingState = VotingState.PENDING;
+        }
         uint weights = (DECIMALS * voter.tokenstake) /
             writerRegistry.totalstake +
             (DECIMALS * voter.votes) /
@@ -216,7 +231,7 @@ contract Article_DAO is GlitchERC20 {
             totalvotes: 1,
             totalchallenges: 1,
             totalweights: 0,
-            votingResult: VotingResult.NONE
+            votingState: VotingState.RECRUITING
         });
     }
 
@@ -266,7 +281,8 @@ contract Article_DAO is GlitchERC20 {
                 writer: writermapping[msg.sender],
                 articleid: articleid,
                 url: url,
-                votedweights: 0
+                votedweights: 0,
+                rank: 0
             })
         );
     }
@@ -291,6 +307,9 @@ contract Article_DAO is GlitchERC20 {
         );
         Voter memory voter = _avoters[proposalid][msg.sender]; // gas 절약
         require(voter.voted == false, "Already voted");
+        if (proposal.votingState == VotingState.RECRUITING) {
+            proposals[proposalid].votingState = VotingState.PENDING;
+        }
         uint weights = (DECIMALS * voter.tokenstake) /
             proposal.totalstake +
             (DECIMALS * voter.votes) /
@@ -315,21 +334,19 @@ contract Article_DAO is GlitchERC20 {
                 block.timestamp - writerRegistry.applytime,
             "Voting not expired"
         );
-        if (writerRegistry.votingResult == VotingResult.NONE) {
+        if (writerRegistry.votingState == VotingState.PENDING) {
             _endwregistervote(wregisterid);
         }
         WriterRegistration memory writerRegistry_u = writerRegistrations[
             wregisterid
         ]; // updated된 값
-        if (
-            writerRegistry_u.votingResult == VotingResult.FOR && voter.voteFor
-        ) {
+        if (writerRegistry_u.votingState == VotingState.FOR && voter.voteFor) {
             uint reward = voter.tokenstake +
                 ((writerRegistry_u.voteAgainststake * voter.weights) /
                     writerRegistry_u.voteFor);
             TransferHelper.safeTransfer(address(this), msg.sender, reward);
         } else if (
-            writerRegistry_u.votingResult == VotingResult.AGAINST &&
+            writerRegistry_u.votingState == VotingState.AGAINST &&
             !voter.voteFor
         ) {
             uint reward = voter.tokenstake +
@@ -349,7 +366,7 @@ contract Article_DAO is GlitchERC20 {
                 (writerRegistry.voteFor + writerRegistry.voteAgainst) >=
             _pi_quorum
         ) {
-            writerRegistrations[wregisterid].votingResult = VotingResult.FOR;
+            writerRegistrations[wregisterid].votingState = VotingState.FOR;
             _updateforprob();
             _voteresult.push(true);
             writers[writerRegistry.writer._address] = true;
@@ -360,18 +377,14 @@ contract Article_DAO is GlitchERC20 {
                 REGISTRATIONDEPOSIT
             );
         } else {
-            writerRegistrations[wregisterid].votingResult = VotingResult
-                .AGAINST;
+            writerRegistrations[wregisterid].votingState = VotingState.AGAINST;
             _updateagainstprob();
             _voteresult.push(false);
         }
     }
 
     // article 투표 종료 후 보상
-    function claimRewardA(
-        uint proposalid,
-        uint articleid
-    ) external returns (uint rewards) {
+    function claimRewardA(uint proposalid, uint articleid) external {
         require(
             votedarticles[msg.sender][proposalid] == articleid,
             "You voted another article!"
@@ -385,20 +398,48 @@ contract Article_DAO is GlitchERC20 {
                 block.timestamp - proposal.applytime,
             "Voting not expired"
         );
-        if (proposal.votingResult == VotingResult.NONE) {
-            proposals[proposalid].votingResult = VotingResult.END;
+        if (proposal.votingState == VotingState.PENDING) {
+            _endarticlevote(proposalid);
         }
-        Proposal memory proposal_u = proposals[proposalid]; // updated된 값
-        if (proposal_u.votingResult == VotingResult.END) {
-            uint articlereward = ((DECIMALS *
-                (proposal_u.proposerstake + proposal_u.totalstake) *
-                article.votedweights) / proposal.totalweights) / DECIMALS;
-            uint rewardraito = (DECIMALS * voter.weights) /
-                article.votedweights;
-            uint reward = (articlereward * rewardraito) / DECIMALS;
-            TransferHelper.safeTransfer(address(this), msg.sender, reward);
-            rewards = articlereward;
+        require(article.rank != 0, "Article not ranked");
+        Article memory article_u = articles[proposalid][articleid]; //update된 값
+        uint article_reward;
+        if (article_u.rank == 1) {
+            article_reward =
+                ((proposal.proposerstake + proposal.totalstake) * 5) /
+                10;
+        } else if (article_u.rank == 2) {
+            article_reward =
+                ((proposal.proposerstake + proposal.totalstake) * 3) /
+                10;
+        } else {
+            article_reward =
+                ((proposal.proposerstake + proposal.totalstake) * 2) /
+                10;
         }
+        uint reward = (article_reward * voter.weights) / article_u.votedweights;
+
+        TransferHelper.safeTransfer(address(this), msg.sender, reward);
+    }
+
+    function _endarticlevote(uint proposalid) internal {
+        Article[] memory articlearray = articles[proposalid];
+        uint length = articlearray.length;
+        for (uint i = 0; i < length; i++) {
+            for (uint j = i + 1; j < length; j++) {
+                if (
+                    articlearray[i].votedweights < articlearray[j].votedweights
+                ) {
+                    Article memory temp = articlearray[i];
+                    articlearray[i] = articlearray[j];
+                    articlearray[j] = temp;
+                }
+            }
+        }
+        articles[proposalid][articlearray[0].articleid].rank = 1;
+        articles[proposalid][articlearray[1].articleid].rank = 2;
+        articles[proposalid][articlearray[2].articleid].rank = 3;
+        proposals[proposalid].votingState = VotingState.END;
     }
 
     //작가 리스트에 대한 challenge
