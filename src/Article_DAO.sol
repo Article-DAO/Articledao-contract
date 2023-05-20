@@ -370,7 +370,6 @@ contract Article_DAO is GlitchERC20 {
         }
     }
 
-    // 작가 TCR투표 종료하고 결과 확인
     function _endwregistervote(uint wregisterid) internal {
         WriterRegistration memory writerRegistry = writerRegistrations[
             wregisterid
